@@ -1,0 +1,229 @@
+{
+  "meta": {
+    "title": "Føre timer?",
+    "footer": "Veiviseren «Føre timer»"
+  },
+  "schema": [
+    {
+      "id": "relation",
+      "type": "Page",
+      "heading": "Arbeidssted",
+      "lead": "Hvor du jobbet kan ha betydning for hvordan tiden skal føres.",
+      "children": [
+        {
+          "id": "atTheOffice",
+          "property": "atTheOffice",
+          "type": "Radio",
+          "heading": "Startet og sluttet du dagen på kontoret?",
+          "options": [
+            {
+              "id": "atTheOffice.yes",
+              "type": "Answer",
+              "heading": "Ja",
+              "value": true
+            },
+            {
+              "id": "atTheOffice.no",
+              "type": "Answer",
+              "heading": "Nei",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": "regularHoursResult",
+          "type": "Result",
+          "heading": "Ferdig 🎉",
+          "lead": "Før arbeidstimer som vanlig i DFØ-appen",
+          "show": { "field": "atTheOffice", "operator": "eq", "value": true }
+        }
+      ]
+    },
+    {
+      "id": "travelling",
+      "type": "Page",
+      "heading": "Tjenestereise",
+      "children": [
+        {
+          "id": "jobTravel",
+          "property": "jobTravel",
+          "type": "Radio",
+          "heading": "Har du vært på tjenestereise?",
+          "options": [
+            {
+              "id": "jobTravel.yes",
+              "type": "Answer",
+              "heading": "Ja",
+              "value": true
+            },
+            {
+              "id": "jobTravel.no",
+              "type": "Answer",
+              "heading": "Nei",
+              "value": false
+            },
+            {
+              "id": "jobTravel.abroad",
+              "type": "Answer",
+              "heading": "Jeg har vært på utenlandsreise",
+              "value": "abroad"
+            }
+          ]
+        },
+        {
+          "id": "abroadResult",
+          "type": "Result",
+          "heading": "Ferdig, men vanskelig 🤔",
+          "lead": "Dette er vanskelig – spør Anne Vigdis om hjelp.",
+          "show": { "field": "jobTravel", "operator": "eq", "value": "abroad" }
+        },
+        {
+          "id": "travellingBranch",
+          "type": "Branch",
+          "branches": [
+            {
+              "test": { "field": "jobTravel", "operator": "eq", "value": true },
+              "children": [
+                {
+                  "id": "startAndEndAtHome",
+                  "property": "startAndEndAtHome",
+                  "type": "Radio",
+                  "heading": "Startet og sluttet reisen hjemme?",
+                  "options": [
+                    {
+                      "id": "startAndEndAtHome.yes",
+                      "type": "Answer",
+                      "heading": "Ja",
+                      "value": true
+                    },
+                    {
+                      "id": "startAndEndAtHome.no",
+                      "type": "Answer",
+                      "heading": "Nei",
+                      "value": false
+                    }
+                  ]
+                },
+                {
+                  "id": "allTravelTimeResult",
+                  "type": "Result",
+                  "heading": "Ferdig 🎉",
+                  "lead": "Før hele perioden/alle timene som reisetid. Spesifiser arbeidstid og reisetid hver for seg.",
+                  "show": { "field": "startAndEndAtHome", "operator": "eq", "value": true }
+                },
+                {
+                  "id": "tripStartingPoint",
+                  "property": "tripStartingPoint",
+                  "type": "Radio",
+                  "heading": "Hvor startet reisen?",
+                  "options": [
+                    {
+                      "id": "tripStartingPoint.home",
+                      "type": "Answer",
+                      "heading": "Startet hjemme og sluttet på jobb",
+                      "value": "home"
+                    },
+                    {
+                      "id": "tripStartingPoint.work",
+                      "type": "Answer",
+                      "heading": "Startet på jobb og sluttet hjemme",
+                      "value": "work"
+                    }
+                  ]
+                },
+                {
+                  "id": "travelFromHome",
+                  "type": "Result",
+                  "heading": "Ferdig 🎉",
+                  "lead": "Du må føre timer fra du reiste hjemmefra til du slutter på jobb.",
+                  "show": { "field": "tripStartingPoint", "operator": "eq", "value": "home" }
+                },
+                {
+                  "id": "travelFromWork",
+                  "type": "Result",
+                  "heading": "Ferdig 🎉",
+                  "lead": "Du må føre timer fra du kom på jobb til du kom hjem.",
+                  "show": { "field": "tripStartingPoint", "operator": "eq", "value": "work" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homeOfficePage",
+      "type": "Page",
+      "heading": "Hjemmekontor",
+      "children": [
+        {
+          "id": "homeOffice",
+          "property": "homeOffice",
+          "type": "Radio",
+          "heading": "Har du hatt hjemmekontor (etter signert avtale)?",
+          "options": [
+            {
+              "id": "homeOffice.yes",
+              "type": "Answer",
+              "heading": "Ja",
+              "value": true
+            },
+            {
+              "id": "homeOffice.no",
+              "type": "Answer",
+              "heading": "Nei, jeg har ikke vært på jobb",
+              "value": false
+            }
+          ]
+        },
+        {
+          "type": "Reference",
+          "nodeId": "regularHoursResult",
+          "show": { "field": "homeOffice", "operator": "eq", "value": true }
+        }
+      ]
+    },
+    {
+      "id": "absence",
+      "type": "Page",
+      "heading": "Fravær",
+      "show": { "field": "homeOffice", "operator": "eq", "value": false },
+      "children": [
+        {
+          "id": "notAtWork",
+          "property": "notAtWork",
+          "type": "Radio",
+          "heading": "Hvorfor har du ikke vært på jobb?",
+          "options": [
+            {
+              "id": "notAtWork.yes",
+              "type": "Answer",
+              "heading": "Jeg har vært syk",
+              "value": "sick"
+            },
+            {
+              "id": "notAtWork.no",
+              "type": "Answer",
+              "heading": "Jeg har vært hjemme med sykt barn",
+              "value": "sickChild"
+            }
+          ]
+        },
+        {
+          "id": "sickResult",
+          "type": "Result",
+          "heading": "Ferdig 🎉",
+          "lead": "Søk om fravær i DFØ-appen.",
+          "show": { "field": "notAtWork", "operator": "eq", "value": "sick" }
+        },
+        {
+          "id": "sickResult",
+          "type": "Result",
+          "heading": "Ferdig 🎉",
+          "lead": "Søk om velferdspermisjon i DFØ-appen.",
+          "show": { "field": "notAtWork", "operator": "eq", "value": "sickChild" }
+        }
+      ]
+    }
+  ]
+}
