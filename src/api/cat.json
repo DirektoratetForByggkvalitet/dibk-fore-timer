@@ -171,7 +171,28 @@
             {
               "id": "homeOffice.no",
               "type": "Answer",
-              "heading": "Nei, jeg har ikke vært på jobb",
+              "heading": "Nei",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": "workedSomeplaceElse",
+          "property": "workedSomeplaceElse",
+          "type": "Radio",
+          "heading": "Jobbet du som vanlig, bare et annet sted?",
+          "show": { "field": "homeOffice", "operator": "eq", "value": false },
+          "options": [
+            {
+              "id": "workedSomeplaceElse.yes",
+              "type": "Answer",
+              "heading": "Ja",
+              "value": true
+            },
+            {
+              "id": "workedSomeplaceElse.no",
+              "type": "Answer",
+              "heading": "Nei",
               "value": false
             }
           ]
@@ -179,7 +200,13 @@
         {
           "type": "Reference",
           "nodeId": "regularHoursResult",
-          "show": { "field": "homeOffice", "operator": "eq", "value": true }
+          "show": {
+            "type": "or",
+            "clauses": [
+              { "field": "workedSomeplaceElse", "operator": "eq", "value": true },
+              { "field": "homeOffice", "operator": "eq", "value": true }
+            ]
+          }
         }
       ]
     },
